@@ -2,3 +2,4 @@
 *.iml
 target/
 application.properties
+dependency-reduced-pom.xml
