@@ -1,0 +1,10 @@
+gmail.username=gmail.id
+gmail.password=gmail.password
+mail.notification.recipients=comma separate recipient list
+
+proxy.enabled=false
+http-proxy.hostname=localhost
+http-proxy.port=3128
+
+prowl.api.key=prowl api key
+prowl.notification.launch.url=URL to launch on push notification
