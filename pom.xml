@@ -100,7 +100,7 @@
 						<goals>
 							<goal>run</goal>
 						</goals>
-						<phase>process-resources</phase>
+						<phase>initialize</phase>
 						<configuration>
 							<target>
 								<copy file="src/main/resources/default-application-config.properties" overwrite="false" tofile="src/main/resources/application.properties" />
