@@ -17,6 +17,7 @@
     <repositories>
         <repository>
             <id>lib</id>
+            <name>In Project Repo</name>
             <url>file://${basedir}/lib</url>
         </repository>
     </repositories>
@@ -107,8 +108,8 @@
         <!-- Email notifications -->
         <dependency>
             <groupId>javax.mail</groupId>
-            <artifactId>com.springsource.javax.mail</artifactId>
-            <version>1.4.0</version>
+            <artifactId>mail</artifactId>
+            <version>1.4</version>
         </dependency>
 
         <!-- Prowl Notifications -->
