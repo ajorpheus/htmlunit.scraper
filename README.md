@@ -1,5 +1,3 @@
-[TOC]
-
 SBI UK Automation
 ================
 
