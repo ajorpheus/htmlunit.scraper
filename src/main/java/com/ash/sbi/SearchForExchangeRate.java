@@ -27,11 +27,20 @@ public class SearchForExchangeRate {
     @Autowired
     ProwlNotification prowlNotification;
 
+    @Value("${proxy.enabled}")
     private boolean proxyEnabled;
     @Value("${http-proxy.hostname}")
     private String proxyHostName;
     @Value("${http-proxy.port}")
     private int proxyPort;
+
+
+    @Value("${email.notifications.enabled}")
+    private boolean emailNotificationsEnabled;
+
+    @Value("${prowl.notifications.enabled}")
+    private boolean prowlNotificationsEnabled;
+
 
     private WebClient webClient;
 
@@ -100,6 +109,7 @@ public class SearchForExchangeRate {
         webClient.setThrowExceptionOnScriptError(false);
 
         if (proxyEnabled) {
+            logger.info("Proxy is enabled. Using ProxyHost:{} , ProxyPort: {}", proxyHostName, proxyPort);
             ProxyConfig proxyConfig = new ProxyConfig(proxyHostName, proxyPort);
             webClient.setProxyConfig(proxyConfig);
         }
@@ -133,10 +143,19 @@ public class SearchForExchangeRate {
                 , new Object[]{exchangeRateDialogueText, exchangeRate});
         System.out.println("\u0007");
 
-        prowlNotification.send("Exchange Rate ", "GBP/INR: " + exchangeRate, String.format("Exchange Rates:%s", exchangeRateDialogueText));
+        if(prowlNotificationsEnabled)
+        {
+            logger.info("Prowl notifications are enabled.");
+            prowlNotification.send("Exchange Rate ", "GBP/INR: " + exchangeRate, String.format("Exchange Rates:%s", exchangeRateDialogueText));
+        }
 
-        String emailBody = escape(exchangeRateDialogueText);
-        emailService.sendEmail(emailBody, "Exchange Rate GBP/INR: " + exchangeRate);
+        if(emailNotificationsEnabled)
+        {
+            logger.info("Email notifications are enabled.");
+            String emailBody = escape(exchangeRateDialogueText);
+            emailService.sendEmail(emailBody, "Exchange Rate GBP/INR: " + exchangeRate);
+        }
+
     }
 
     private void tearDownHtmlUnit() {
