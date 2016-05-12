@@ -1,26 +1,29 @@
 package com.ash.sbi;
 
-import com.ash.sbi.spec.EmailService;
-import com.gargoylesoftware.htmlunit.BrowserVersion;
-import com.gargoylesoftware.htmlunit.ProxyConfig;
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlElement;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
+
+
+import java.io.IOException;
+import java.text.ParseException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.text.ParseException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
+import com.ash.sbi.slack.SlackNotification;
+import com.ash.sbi.spec.EmailService;
+import com.gargoylesoftware.htmlunit.BrowserVersion;
+import com.gargoylesoftware.htmlunit.ProxyConfig;
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlElement;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
 @Component
 public class SearchForExchangeRate {
     public static final String URL = "http://www.sbiuk.com/personal-banking/personal/nri-services";
-
-    Logger logger = LoggerFactory.getLogger(SearchForExchangeRate.class);
+    public static final Logger logger = LoggerFactory.getLogger(SearchForExchangeRate.class);
 
     @Autowired
     EmailService emailService;
@@ -45,11 +48,11 @@ public class SearchForExchangeRate {
     private WebClient webClient;
 
     private static String extractExchangeRate(String exchangeRateDialogueText) throws Exception {
-        Pattern regex = Pattern.compile(".*GBP/INR:\\s*(.*)EUR.*", Pattern.DOTALL);
+        Pattern regex = Pattern.compile(".*GBP/INR Rate:\\s*\\nAmount.*\\n£0.*\\n.*\t(.*)\\n£5,001.*", Pattern.DOTALL);
         Matcher regexMatcher = regex.matcher(exchangeRateDialogueText);
         if (regexMatcher.find()) {
             String exchangeRate = regexMatcher.group(1);
-            System.out.println(exchangeRate);
+            logger.info(exchangeRate);
             return exchangeRate;
         } else {
             throw new Exception("Exchange Rate not found in " + exchangeRateDialogueText);
@@ -103,10 +106,12 @@ public class SearchForExchangeRate {
 
     private void setupHtmlUnit() {
         java.util.logging.Logger.getLogger("com.gargoylesoftware").setLevel(java.util.logging.Level.OFF);
+
         webClient = new WebClient(BrowserVersion.FIREFOX_3_6);
         webClient.setCssEnabled(false);
         webClient.setTimeout(35000);
         webClient.setThrowExceptionOnScriptError(false);
+        webClient.setJavaScriptEnabled(false);
 
         if (proxyEnabled) {
             logger.info("Proxy is enabled. Using ProxyHost:{} , ProxyPort: {}", proxyHostName, proxyPort);
@@ -127,12 +132,12 @@ public class SearchForExchangeRate {
         logger.info("\nDialogue Text\n**************\n" + exchangeRateDialogueText + "\n************\n\n");
         logger.info("\nGBP/INR Rate: \n**************\n" + gbpInrExchangeRate + "\n************");
 
-        sendNotificationIfEarlierDateAvailable(gbpInrExchangeRate, exchangeRateDialogueText);
+        sendNotifications(gbpInrExchangeRate, exchangeRateDialogueText);
 
         tearDownHtmlUnit();
     }
 
-    private void sendNotificationIfEarlierDateAvailable(String exchangeRate, String exchangeRateDialogueText) throws ParseException {
+    private void sendNotifications(String exchangeRate, String exchangeRateDialogueText) throws ParseException {
         logger.debug(
                 "\n\n********************************************************\n" +
                         "********************************************************\n" +
@@ -141,7 +146,7 @@ public class SearchForExchangeRate {
                         "********************************************************\n" +
                         "********************************************************"
                 , new Object[]{exchangeRateDialogueText, exchangeRate});
-        System.out.println("\u0007");
+        logger.info("\u0007");
 
         if(prowlNotificationsEnabled)
         {
