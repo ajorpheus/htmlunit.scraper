@@ -15,6 +15,7 @@ In `application.properties` to enable and configure the proxy use the following 
     http-proxy.hostname=proxy-host
     http-proxy.port=proxy-port
 
+This proxy will be used both by HTML unit as well as for slack notifications.
 
 #### E-mail Notifications
 In `application.properties` to enable and configure email notifications use the following properties:
@@ -28,6 +29,15 @@ In `application.properties` to enable and configure prowl notifications use the 
 
     prowl.api.key=prowl-api-key (See below)
     prowl.notification.launch.url=The URL that is launched when the push notification is opened
+
+#### Slack Notifications
+In `application.properties` to enable and configure prowl notifications use the following properties:
+
+    slack.notifications.enabled=true/false
+    slack.bot.token=slack bot token
+    slack.notificaiton.channel=notifications
+
+See https://api.slack.com/bot-users to setup a bot (and get the token)
 
 Usage 
 -------------

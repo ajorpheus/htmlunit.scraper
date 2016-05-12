@@ -29,6 +29,8 @@ public class SearchForExchangeRate {
     EmailService emailService;
     @Autowired
     ProwlNotification prowlNotification;
+    @Autowired
+    SlackNotification slackNotification;
 
     @Value("${proxy.enabled}")
     private boolean proxyEnabled;
@@ -44,6 +46,8 @@ public class SearchForExchangeRate {
     @Value("${prowl.notifications.enabled}")
     private boolean prowlNotificationsEnabled;
 
+    @Value("${slack.notifications.enabled}")
+    private boolean slackNotificationsEnabled;
 
     private WebClient webClient;
 
@@ -161,6 +165,18 @@ public class SearchForExchangeRate {
             emailService.sendEmail(emailBody, "Exchange Rate GBP/INR: " + exchangeRate);
         }
 
+
+        if(slackNotificationsEnabled)
+        {
+            logger.info("Slack notifications are enabled.");
+            try {
+                slackNotification.send(exchangeRate);
+                slackNotification.send(exchangeRateDialogueText);
+            } catch (IOException e) {
+                logger.error("Couldn't send slack notification");
+                // ignore
+            }
+        }
     }
 
     private void tearDownHtmlUnit() {

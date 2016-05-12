@@ -10,6 +10,11 @@
 		<slf4jVersion>1.6.1</slf4jVersion>
 	</properties>
 	<dependencies>
+		<dependency>
+			<groupId>com.ullink.slack</groupId>
+			<artifactId>simpleslackapi</artifactId>
+			<version>0.5.1</version>
+		</dependency>
 		<!-- Email notifications -->
 		<dependency>
 			<groupId>javax.mail</groupId>
