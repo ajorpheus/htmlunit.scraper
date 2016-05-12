@@ -52,7 +52,7 @@ public class SearchForExchangeRate {
     private WebClient webClient;
 
     private static String extractExchangeRate(String exchangeRateDialogueText) throws Exception {
-        Pattern regex = Pattern.compile(".*GBP/INR Rate:\\s*\\nAmount.*\\n£0.*\\n.*\t(.*)\\n£5,001.*", Pattern.DOTALL);
+        Pattern regex = Pattern.compile(".*GBP/INR Rate:\\s*\\nAmount.*\\n.0.*\\n.*\t(.*)\\n.5,001.*", Pattern.DOTALL);
         Matcher regexMatcher = regex.matcher(exchangeRateDialogueText);
         if (regexMatcher.find()) {
             String exchangeRate = regexMatcher.group(1);
