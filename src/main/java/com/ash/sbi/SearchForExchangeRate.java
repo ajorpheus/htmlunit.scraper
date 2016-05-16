@@ -59,7 +59,8 @@ public class SearchForExchangeRate {
             logger.info(exchangeRate);
             return exchangeRate;
         } else {
-            throw new Exception("Exchange Rate not found in " + exchangeRateDialogueText);
+            logger.error("Exchange Rate not found in " + exchangeRateDialogueText);
+            return exchangeRateDialogueText;
         }
     }
 
