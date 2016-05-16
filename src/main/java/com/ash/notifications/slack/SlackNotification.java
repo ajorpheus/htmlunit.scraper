@@ -9,7 +9,7 @@
  *
  */
 
-package com.ash.sbi.slack;
+package com.ash.notifications.slack;
 
 import java.io.IOException;
 import java.net.Proxy;

@@ -9,7 +9,7 @@
  *
  */
 
-package com.ash.sbi.slack;
+package com.ash.notifications.slack;
 
 import com.ullink.slack.simpleslackapi.SlackChannel;
 import com.ullink.slack.simpleslackapi.SlackMessageHandle;

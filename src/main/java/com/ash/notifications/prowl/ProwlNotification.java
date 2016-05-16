@@ -1,14 +1,26 @@
-package com.ash.sbi;
+/*
+ *
+ *  * Copyright 2003-2015 Monitise Group Limited. All Rights Reserved.
+ *  *
+ *  * Save to the extent permitted by law, you may not use, copy, modify,
+ *  * distribute or create derivative works of this material or any part
+ *  * of it without the prior written consent of Monitise Group Limited.
+ *  * Any reproduction of this material must contain this notice.
+ *
+ */
+
+package com.ash.notifications.prowl;
+
+import java.util.Date;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.stereotype.Component;
 
 import net.sourceforge.prowl.api.DefaultProwlEvent;
 import net.sourceforge.prowl.api.ProwlClient;
 import net.sourceforge.prowl.api.ProwlEvent;
 import net.sourceforge.prowl.exception.ProwlException;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.stereotype.Component;
-
-import java.util.Date;
 
 @Component
 public class ProwlNotification {

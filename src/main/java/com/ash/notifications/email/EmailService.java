@@ -1,4 +1,4 @@
-package com.ash.sbi.spec;
+package com.ash.notifications.email;
 
 /**
  * Created by az on 15/12/2014.

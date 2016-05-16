@@ -1,4 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ /*
+  ~  * Copyright 2003-2015 Monitise Group Limited. All Rights Reserved.
+  ~  *
+  ~  * Save to the extent permitted by law, you may not use, copy, modify,
+  ~  * distribute or create derivative works of this material or any part
+  ~  * of it without the prior written consent of Monitise Group Limited.
+  ~  * Any reproduction of this material must contain this notice.
+  ~  */
+  -->
+
 <beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:p="http://www.springframework.org/schema/p"
@@ -7,10 +18,9 @@
        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
        ">
 
-    <context:component-scan base-package="com.ash.sbi"/>
+    <context:component-scan base-package="com.ash"/>
 
     <context:property-placeholder location="classpath:default-application-config.properties,classpath:application.properties" ignore-unresolvable="true"/>
-
 
     <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl" p:host="smtp.gmail.com"
           p:port="587" p:username="${gmail.username}" p:password="${gmail.password}">
