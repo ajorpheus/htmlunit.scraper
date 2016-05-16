@@ -172,7 +172,7 @@ public class SearchForExchangeRate {
             logger.info("Slack notifications are enabled.");
             try {
                 slackNotification.send(exchangeRate);
-                slackNotification.send(exchangeRateDialogueText);
+                //slackNotification.send(exchangeRateDialogueText);
             } catch (IOException e) {
                 logger.error("Couldn't send slack notification");
                 // ignore
