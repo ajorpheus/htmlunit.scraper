@@ -63,7 +63,7 @@ Build the project:
 `mvn clean install`
  
  Use the executable jar like so:
- `java -cp "full-path-to/sbi.automation-1.0-SNAPSHOT-executable.jar"  com.ash.automation.Main -Dscraper=scraperImplSBI`
+ `java -cp "full-path-to/htmlunit.scraper-1.0-SNAPSHOT-executable.jar"  com.ash.automation.Main -Dscraper=scraperImplSBI`
 
 
 ##### Footnotes
