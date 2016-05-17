@@ -58,4 +58,9 @@ public class ScraperImplSBI implements Scraper {
 
 		return gbpInrExchangeRate;
 	}
+
+
+	public String getNotificationSubject() {
+		return "Exchange Rate GBP/INR:";
+	}
 }

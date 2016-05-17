@@ -18,4 +18,5 @@ import com.gargoylesoftware.htmlunit.WebClient;
  */
 public interface Scraper {
 	String scrapeForData(WebClient webClient) throws Exception;
+	String getNotificationSubject();
 }

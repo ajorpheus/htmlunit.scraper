@@ -27,8 +27,9 @@ public class ScrapeForData {
     ProwlNotification prowlNotification;
     @Autowired
     SlackNotification slackNotification;
-	@Autowired
-    Scraper scraper;
+
+	@Value("${scraper}")
+	private static String scraperName;
 
     @Value("${proxy.enabled}")
     private boolean proxyEnabled;
@@ -48,8 +49,9 @@ public class ScrapeForData {
     private boolean slackNotificationsEnabled;
 
     private WebClient webClient;
+	private Scraper scraper;
 
-    private void setupHtmlUnit() {
+	private void setupHtmlUnit() {
         java.util.logging.Logger.getLogger("com.gargoylesoftware").setLevel(Level.OFF);
 
         webClient = new WebClient(BrowserVersion.FIREFOX_3_6);
@@ -65,34 +67,34 @@ public class ScrapeForData {
         }
     }
 
-    public void performMagic() throws Exception {
+	public void performMagic() throws Exception {
         setupHtmlUnit();
         String data = scraper.scrapeForData(webClient);
         sendNotifications(data);
         tearDownHtmlUnit();
     }
 
-    private void sendNotifications(String exchangeRate) throws ParseException {
+    private void sendNotifications(String scrapedData) throws ParseException {
         logger.debug(
                 "\n\n********************************************************\n" +
                         "********************************************************\n" +
-                        "GBP/INR Exchange Rate: {}" +
+                        "Data: {}" +
                         "********************************************************\n" +
                         "********************************************************"
-                , new Object[]{exchangeRate});
+                , new Object[]{scrapedData});
         logger.info("\u0007");
 
         if(prowlNotificationsEnabled)
         {
             logger.info("Prowl notifications are enabled.");
-            prowlNotification.send("Exchange Rate ", "GBP/INR: " + exchangeRate, "");
+            prowlNotification.send(scraper.getNotificationSubject(), scrapedData, "");
         }
 
         if(emailNotificationsEnabled)
         {
             logger.info("Email notifications are enabled.");
 //            String emailBody = Helper.escape(exchangeRateDialogueText);
-            emailService.sendEmail("", "Exchange Rate GBP/INR: " + exchangeRate);
+            emailService.sendEmail(scraper.getNotificationSubject(), scrapedData);
         }
 
 
@@ -100,7 +102,7 @@ public class ScrapeForData {
         {
             logger.info("Slack notifications are enabled.");
             try {
-                slackNotification.send(exchangeRate);
+                slackNotification.send(scrapedData);
                 //slackNotification.send(exchangeRateDialogueText);
             } catch (IOException e) {
                 logger.error("Couldn't send slack notification");
@@ -114,4 +116,7 @@ public class ScrapeForData {
     }
 
 
+	public void setScraper(Scraper scraper) {
+		this.scraper = scraper;
+	}
 }

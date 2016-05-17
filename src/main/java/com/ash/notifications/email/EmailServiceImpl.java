@@ -40,10 +40,10 @@ public class EmailServiceImpl implements EmailService {
     public static void main(String[] args) {
         ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext("spring/spring-config.xml");
         EmailService emailService = (EmailService) applicationContext.getBean("emailServiceImpl");
-        emailService.sendEmail("Next Date", "Test subject");
+        emailService.sendEmail("Test subject", "Next Date");
     }
 
-    public void sendEmail(final String body, final String subject) {
+    public void sendEmail(final String subject, final String body) {
         mailSender.send(new MimeMessagePreparator() {
             public void prepare(MimeMessage mimeMessage) throws javax.mail.MessagingException {
                 MimeMessageHelper message = new MimeMessageHelper(mimeMessage, true, "UTF-8");
