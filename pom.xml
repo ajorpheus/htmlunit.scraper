@@ -98,17 +98,17 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-antrun-plugin</artifactId>
-				<version>1.7</version>
+				<version>1.8</version>
 				<executions>
 					<execution>
-						<id>copy-application-config</id>
+						<id>default-cli</id>
 						<goals>
 							<goal>run</goal>
 						</goals>
 						<phase>initialize</phase>
 						<configuration>
 							<target>
-								<copy file="src/main/resources/default-application-config.properties" overwrite="false" tofile="src/main/resources/application.properties" />
+								<copy file="src/main/resources/default-application-config.properties" overwrite="false" tofile="src/main/resources/application.properties" verbose="true" />
 							</target>
 						</configuration>
 					</execution>
