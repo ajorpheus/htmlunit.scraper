@@ -1,9 +1,23 @@
-SBI UK Automation
-================
+HTML Unit Scraper
+=================
 
-This project extracts the currency exchange rates from the SBI UK site and sends e-mail and **prowl** notifications (highlighting the GBP/INR exchange rate).
+This project uses HTML Unit to scrape data from websites and allow sending relevant portions of the scraped data via multiple notification channels. 
 
-This application uses **htmlunit** as the headless browser.
+Scrapers 
+-------------
+
+#### SBI Exchange Rate Scraper
+
+This scraper extracts the currency exchange rates from the SBI UK site.
+
+To use it pass the JVM arg -Dscraper=scraperImplSBI (case-sensitive)
+
+#### Bin Day Scraper
+
+This scraper extracts the bin info from the relevant gov website.
+
+To use it pass the JVM arg -Dscraper=scraperImplBins (case-sensitive)
+
 
 Configuration 
 -------------
@@ -16,6 +30,9 @@ In `application.properties` to enable and configure the proxy use the following 
     http-proxy.port=proxy-port
 
 This proxy will be used both by HTML unit as well as for slack notifications.
+
+Notification Channels 
+-------------
 
 #### E-mail Notifications
 In `application.properties` to enable and configure email notifications use the following properties:
@@ -41,7 +58,12 @@ See https://api.slack.com/bot-users to setup a bot (and get the token)
 
 Usage 
 -------------
-`mvn clean install` 
+
+Build the project:
+`mvn clean install`
+ 
+ Use the executable jar like so:
+ `java -cp "full-path-to/sbi.automation-1.0-SNAPSHOT-executable.jar"  com.ash.automation.Main -Dscraper=scraperImplSBI`
 
 
 ##### Footnotes
