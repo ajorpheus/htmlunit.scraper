@@ -87,14 +87,22 @@ public class ScrapeForData {
         if(prowlNotificationsEnabled)
         {
             logger.info("Prowl notifications are enabled.");
-            prowlNotification.send(scraper.getNotificationSubject(), scrapedData, "");
+            try{
+                prowlNotification.send(scraper.getNotificationSubject(), scrapedData, "");
+            } catch (Exception e){
+                logger.error("Error while sending prowl notification : " + e.getMessage());
+            }
         }
 
         if(emailNotificationsEnabled)
         {
-            logger.info("Email notifications are enabled.");
+            try{
+                logger.info("Email notifications are enabled.");
 //            String emailBody = Helper.escape(exchangeRateDialogueText);
-            emailService.sendEmail(scraper.getNotificationSubject(), scrapedData);
+                emailService.sendEmail(scraper.getNotificationSubject(), scrapedData);
+            } catch (Exception e){
+                logger.error("Error while sending email notification : " + e.getMessage());
+            }
         }
 
 
