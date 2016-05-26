@@ -14,13 +14,6 @@
 			<groupId>com.ullink.slack</groupId>
 			<artifactId>simpleslackapi</artifactId>
 			<version>0.5.1</version>
-
-			<exclusions>
-				<exclusion>
-					<groupId>ch.qos.logback</groupId>
-					<artifactId>logback-classic</artifactId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 		<!-- Email notifications -->
 		<dependency>
@@ -79,6 +72,41 @@
 	</dependencies>
 	<build>
 		<plugins>
+			<!--
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<version>1.2.1</version>
+				<configuration>
+					<mainClass>com.ash.automation.Main</mainClass>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>java</goal>
+						</goals>
+						<phase>install</phase>
+					</execution>
+				</executions>
+			</plugin>
+-->
+			<!-- Includes the runtime dependencies -->
+			<plugin>
+				<groupId>com.github.sampov2</groupId>
+				<artifactId>onejar-maven-plugin</artifactId>
+				<version>1.4.6</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>one-jar</goal>
+						</goals>
+						<configuration>
+							<mainClass>com.ash.automation.Main</mainClass>
+							<attachToBuild>true</attachToBuild>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 			<plugin>
 				<groupId>com.google.code.sortpom</groupId>
 				<artifactId>maven-sortpom-plugin</artifactId>
@@ -138,6 +166,7 @@
 					</archive>
 				</configuration>
 			</plugin>
+<!--
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-shade-plugin</artifactId>
@@ -161,13 +190,14 @@
 								</transformer>
 							</transformers>
 							<shadedArtifactAttached>true</shadedArtifactAttached>
-							<!-- configures the suffix name for the executable jar
-                                 here it will be '<project.artifact>-<project.version>-executable.jar'-->
+							&lt;!&ndash; configures the suffix name for the executable jar
+                                 here it will be '<project.artifact>-<project.version>-executable.jar'&ndash;&gt;
 							<shadedClassifierName>executable</shadedClassifierName>
 						</configuration>
 					</execution>
 				</executions>
 			</plugin>
+-->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
@@ -175,22 +205,6 @@
 				<configuration>
 					<skipTests>true</skipTests>
 				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>exec-maven-plugin</artifactId>
-				<version>1.2.1</version>
-				<configuration>
-					<mainClass>com.ash.automation.Main</mainClass>
-				</configuration>
-				<executions>
-					<execution>
-						<goals>
-							<goal>java</goal>
-						</goals>
-						<phase>install</phase>
-					</execution>
-				</executions>
 			</plugin>
 		</plugins>
 	</build>
@@ -201,4 +215,11 @@
 			<url>file://${basedir}/lib</url>
 		</repository>
 	</repositories>
+	<!-- One-Jar is in the googlecode repository -->
+	<pluginRepositories>
+		<pluginRepository>
+			<id>com.github.sampov2.onejar-maven-plugin</id>
+			<url>http://maven.codeforcode.com/repository</url>
+		</pluginRepository>
+	</pluginRepositories>
 </project>
