@@ -12,18 +12,17 @@
 package com.ash.automation.amazon;
 
 import java.text.NumberFormat;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import javax.annotation.PostConstruct;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.ash.automation.Scraper;
-import com.ash.automation.bins.ScraperImplBins;
+import com.ash.automation.amazon.products.crud.Product;
+import com.ash.automation.amazon.products.crud.ProductRepository;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.DomText;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
@@ -33,30 +32,23 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
  */
 @Component
 public class ScraperImplAmazon implements Scraper {
-	public static final Logger logger = LoggerFactory.getLogger(ScraperImplBins.class);
-	private List<AmazonProduct> amazonProducts = new ArrayList<AmazonProduct>();
+	public static final Logger logger = LoggerFactory.getLogger(ScraperImplAmazon.class);
 
-	@PostConstruct
-	public void initProductList() {
-		amazonProducts.add(
-				new AmazonProduct("EVO 500",
-			"https://www.amazon.co.uk/Samsung-inch-Solid-State-Drive/dp/B00P73B1E4", 85));
-		amazonProducts.add(
-				new AmazonProduct("EVO 1TB",
-						"https://www.amazon.co.uk/Samsung-inch-Solid-State-Drive/dp/B00P738MUU", 180));
-	}
+	@Autowired
+	ProductRepository productRepository;
 
 	public String scrapeForData(WebClient webClient) throws Exception {
 		String data = "";
 
-		for (AmazonProduct amazonProduct : amazonProducts) {
-			String amazonProductUrl = amazonProduct.getUrl();
-			logger.info("Navigating to {} ", amazonProductUrl);
+		List<Product> productList = productRepository.findAll();
+		for (Product product : productList) {
+			String productUrl = product.getUrl();
+			logger.info("Navigating to {} ", productUrl);
 
-			double currentPrice = getCurrentPrice(webClient, amazonProductUrl);
+			double currentPrice = getCurrentPrice(webClient, productUrl);
 
-			if (Double.compare(currentPrice, amazonProduct.getExpectedPrice()) < 0){
-				data += String.format("Price of *%s* has dropped to *%s*\n", amazonProduct.getName(), currentPrice);
+			if (Double.compare(currentPrice, Double.parseDouble(product.getExpectedPrice())) < 0){
+				data += String.format("Price of *%s* has dropped to *%s*\n", product.getName(), currentPrice);
 				System.out.println(data);
 			}
 		}
@@ -64,10 +56,10 @@ public class ScraperImplAmazon implements Scraper {
 		return data;
 	}
 
-	private double getCurrentPrice(WebClient webClient, String amazonProductUrl) throws java.io.IOException,
+	private double getCurrentPrice(WebClient webClient, String ProductUrl) throws java.io.IOException,
 			InterruptedException {
 		webClient.setJavaScriptEnabled(true);
-		final HtmlPage page = webClient.getPage(amazonProductUrl);
+		final HtmlPage page = webClient.getPage(ProductUrl);
 
 		DomText currentPriceDomText = page.getFirstByXPath("//span[@id='priceblock_ourprice']/text()");
 		String currentPrice = removeCurrencySymbol(currentPriceDomText.getTextContent());
@@ -86,30 +78,4 @@ public class ScraperImplAmazon implements Scraper {
 		return moneyString.replaceAll(currencySymbol, "");
 	}
 
-
-	class AmazonProduct {
-		private String name;
-		private String url;
-
-		private double expectedPrice;
-
-		public AmazonProduct(String name, String url, double expectedPrice) {
-			this.name = name;
-			this.url = url;
-			this.expectedPrice = expectedPrice;
-		}
-
-		public String getName() {
-			return name;
-		}
-
-		public String getUrl() {
-			return url;
-		}
-
-		public double getExpectedPrice() {
-			return expectedPrice;
-		}
-
-	}
 }
