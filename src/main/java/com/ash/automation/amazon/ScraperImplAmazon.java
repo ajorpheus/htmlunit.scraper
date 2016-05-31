@@ -58,7 +58,7 @@ public class ScraperImplAmazon implements Scraper {
 
 	private double getCurrentPrice(WebClient webClient, String ProductUrl) throws java.io.IOException,
 			InterruptedException {
-		webClient.setJavaScriptEnabled(true);
+		webClient.getOptions().setJavaScriptEnabled(true);
 		final HtmlPage page = webClient.getPage(ProductUrl);
 
 		DomText currentPriceDomText = page.getFirstByXPath("//span[@id='priceblock_ourprice']/text()");

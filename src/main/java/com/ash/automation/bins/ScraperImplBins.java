@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 
 import com.ash.automation.Scraper;
 import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlElement;
+import com.gargoylesoftware.htmlunit.html.DomElement;
 import com.gargoylesoftware.htmlunit.html.HtmlOption;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSelect;
@@ -34,10 +34,10 @@ public class ScraperImplBins implements Scraper {
 
 	public String scrapeForData(WebClient webClient) throws Exception {
 		logger.info("Navigating to {} ", URL);
-		webClient.setJavaScriptEnabled(true);
+		webClient.getOptions().setJavaScriptEnabled(true);
 
 		final HtmlPage page = webClient.getPage(URL);
-		HtmlElement addressDropdownElement = page.getElementById("droAddress");
+		DomElement addressDropdownElement = page.getElementById("droAddress");
 
 		if (addressDropdownElement instanceof HtmlSelect){
 			HtmlSelect addressDropDown = (HtmlSelect) addressDropdownElement;

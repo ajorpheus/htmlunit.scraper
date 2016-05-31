@@ -54,16 +54,16 @@ public class ScrapeForData {
 	private void setupHtmlUnit() {
         java.util.logging.Logger.getLogger("com.gargoylesoftware").setLevel(Level.OFF);
 
-        webClient = new WebClient(BrowserVersion.FIREFOX_3_6);
-        webClient.setCssEnabled(false);
-        webClient.setTimeout(35000);
-        webClient.setThrowExceptionOnScriptError(false);
-        webClient.setJavaScriptEnabled(false);
+        webClient = new WebClient(BrowserVersion.FIREFOX_38);
+        webClient.getOptions().setCssEnabled(false);
+        webClient.getOptions().setTimeout(35000);
+        webClient.getOptions().setThrowExceptionOnScriptError(false);
+        webClient.getOptions().setJavaScriptEnabled(false);
 
         if (proxyEnabled) {
             logger.info("Proxy is enabled. Using ProxyHost:{} , ProxyPort: {}", proxyHostName, proxyPort);
             ProxyConfig proxyConfig = new ProxyConfig(proxyHostName, proxyPort);
-            webClient.setProxyConfig(proxyConfig);
+            webClient.getOptions().setProxyConfig(proxyConfig);
         }
     }
 
@@ -120,7 +120,7 @@ public class ScrapeForData {
     }
 
     private void tearDownHtmlUnit() {
-        webClient.closeAllWindows();
+        webClient.close();
     }
 
 

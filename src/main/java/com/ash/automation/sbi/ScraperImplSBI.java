@@ -20,7 +20,7 @@ import org.springframework.stereotype.Component;
 
 import com.ash.automation.Scraper;
 import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlElement;
+import com.gargoylesoftware.htmlunit.html.DomElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 
 /**
@@ -49,7 +49,7 @@ public class ScraperImplSBI implements Scraper {
 		logger.info("Navigating to {} ", URL);
 
 		final HtmlPage page = webClient.getPage(URL);
-		HtmlElement exchangeRateDialogue = page.getElementById("dnn_ctr1270_quicklinks_pnlRate");
+		DomElement exchangeRateDialogue = page.getElementById("dnn_ctr1270_quicklinks_pnlRate");
 		String exchangeRateDialogueText = exchangeRateDialogue.asText();
 		String gbpInrExchangeRate = extractExchangeRate(exchangeRateDialogueText);
 
