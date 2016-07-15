@@ -22,12 +22,16 @@ import com.gargoylesoftware.htmlunit.html.HtmlOption;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSelect;
 import com.gargoylesoftware.htmlunit.html.HtmlTableRow;
+import com.gargoylesoftware.htmlunit.javascript.background.JavaScriptJobManager;
 
 /**
  * Created by az on 16/05/2016.
  */
 @Component
 public class ScraperImplBins implements Scraper {
+	private int TIME_TO_WAIT_IN_MILLIS = 1000;
+	private int MAX_TIME_TO_WAIT = 10 * TIME_TO_WAIT_IN_MILLIS;
+
 
 	public static final Logger logger = LoggerFactory.getLogger(ScraperImplBins.class);
 	private String URL = "https://wastemanagementcalendar.cardiff.gov.uk/AddressSearch.aspx?ScriptManager1=UpdatePanel1%7CbtnSearch&TextBoxWatermarkExtender1_ClientState=&__ASYNCPOST=true&__EVENTARGUMENT=&__EVENTTARGET=&__EVENTVALIDATION=%2FwEdAAVbLqZr3OQRIt3uMGshH%2Bfsmo%2BdHUlcYdaxxI%2FU%2FS9ZXW8rMPcp2uUNKS9mSvt%2BTTCO1N1XNFmfsMXJasjxX85jjtvMmEKuzieXB%2FWRITu4EPd%2BBbX8J81se59eAiB4t6RGGzWlq8UbnyVqy5phken9&__LASTFOCUS=&__PREVIOUSPAGE=vRoET5o8n9C72_frMgxzVi5rRPjjygE2Lf6Mu9XYsXMnVtLKTQ_x0QyfCZC8r-VzGoLnFYxKtlu0v9TV56TSwmTR8EwAhlJYz0NRO2IdUHI1&__VIEWSTATE=%2FwEPDwUJNDg0NTk5NjYwD2QWAgIBD2QWBgIDD2QWAmYPZBYEAgkPDxYCHgtQb3N0QmFja1VybAUOfi9FbmdsaXNoLmFzcHhkZAILD2QWAmYPZBYCAgMPEGRkFgBkAgcPPCsAEQEMFCsAAGQCCQ9kFgJmD2QWAgIBD2QWAmYPZBYCAgEPZBYCAgEPZBYCZg9kFgICAw9kFgICAQ9kFgICAQ9kFgJmD2QWBAIHD2QWAgIDDxBkZBYBZmQCCQ9kFgICAw8QZGQWAWZkGAEFCUdyaWRWaWV3MQ9nZG2B9CXjxCBmF2k0CYKrGHxtaw%2BsKQzpNecn6k12fSD0&__VIEWSTATEGENERATOR=B98B31EF&btnSearch=Search&txtAddress=CF236DN";
@@ -46,8 +50,23 @@ public class ScraperImplBins implements Scraper {
 			addressDropDown.setSelectedAttribute(option, true);
 		}
 
-		synchronized(page) {
-			page.wait(10000);  // How often to check
+		boolean timedOut=false;
+		JavaScriptJobManager manager = page.getEnclosingWindow().getJobManager();
+		while (manager.getJobCount() > 0) {
+			Thread.sleep(TIME_TO_WAIT_IN_MILLIS);
+			NUMBER_OF_WAITS++;
+			int timeSpentWaiting = TIME_TO_WAIT_IN_MILLIS * NUMBER_OF_WAITS;
+			System.out.println("Waiting #"+ NUMBER_OF_WAITS +", total time spent waiting " + timeSpentWaiting);
+
+			if (timeSpentWaiting > MAX_TIME_TO_WAIT){
+				timedOut = true;
+				break;
+			}
+
+		}
+
+		if (timedOut){
+			return "Timed out waiting for Bin results to load. \n" + MAX_TIME_TO_WAIT /1000 + " seconds may not be enough time to wait for results";
 		}
 
 //		HtmlTable dataTable = page.getFirstByXPath("//div[@id='htmlWaste']//table[@width='100%']");
