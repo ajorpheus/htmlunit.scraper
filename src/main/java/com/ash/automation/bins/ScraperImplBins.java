@@ -30,7 +30,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlTableRow;
 public class ScraperImplBins implements Scraper {
 
 	public static final Logger logger = LoggerFactory.getLogger(ScraperImplBins.class);
-	private String URL = "https://wastemanagementcalendar.cardiff.gov.uk/AddressSearch.aspx?ScriptManager1=UpdatePanel1|btnSearch&TextBoxWatermarkExtender1_ClientState=&__ASYNCPOST=true&__EVENTARGUMENT=&__EVENTTARGET=&__EVENTVALIDATION=%2FwEdAAX71PELrv1XFPImIYrgMtk3mo%2BdHUlcYdaxxI%2FU%2FS9ZXW8rMPcp2uUNKS9mSvt%2BTTCO1N1XNFmfsMXJasjxX85jjtvMmEKuzieXB%2FWRITu4EFDlCm9Bivo1xIV4OxqTkOIVSE447JlkZW3xYk49EtqE&__LASTFOCUS=&__PREVIOUSPAGE=vRoET5o8n9C72_frMgxzVi5rRPjjygE2Lf6Mu9XYsXMnVtLKTQ_x0QyfCZC8r-VzGoLnFYxKtlu0v9TV56TSwmTR8EwAhlJYz0NRO2IdUHI1&__VIEWSTATE=%2FwEPDwUJNDE0NDUyMTQxD2QWAgIBD2QWBAIDD2QWAmYPZBYEAgkPDxYCHgtQb3N0QmFja1VybAUOfi9FbmdsaXNoLmFzcHhkZAILD2QWAmYPZBYCAgMPEGRkFgBkAgcPPCsAEQEMFCsAAGQYAQUJR3JpZFZpZXcxD2dkLHVM0quyZxwNq6EZBes3I%2FfyeKEqM7nYY6R9S03ZK2k%3D&__VIEWSTATEGENERATOR=B98B31EF&btnSearch=Search&txtAddress=CF23%206DN";
+	private String URL = "https://wastemanagementcalendar.cardiff.gov.uk/AddressSearch.aspx?ScriptManager1=UpdatePanel1%7CbtnSearch&TextBoxWatermarkExtender1_ClientState=&__ASYNCPOST=true&__EVENTARGUMENT=&__EVENTTARGET=&__EVENTVALIDATION=%2FwEdAAVbLqZr3OQRIt3uMGshH%2Bfsmo%2BdHUlcYdaxxI%2FU%2FS9ZXW8rMPcp2uUNKS9mSvt%2BTTCO1N1XNFmfsMXJasjxX85jjtvMmEKuzieXB%2FWRITu4EPd%2BBbX8J81se59eAiB4t6RGGzWlq8UbnyVqy5phken9&__LASTFOCUS=&__PREVIOUSPAGE=vRoET5o8n9C72_frMgxzVi5rRPjjygE2Lf6Mu9XYsXMnVtLKTQ_x0QyfCZC8r-VzGoLnFYxKtlu0v9TV56TSwmTR8EwAhlJYz0NRO2IdUHI1&__VIEWSTATE=%2FwEPDwUJNDg0NTk5NjYwD2QWAgIBD2QWBgIDD2QWAmYPZBYEAgkPDxYCHgtQb3N0QmFja1VybAUOfi9FbmdsaXNoLmFzcHhkZAILD2QWAmYPZBYCAgMPEGRkFgBkAgcPPCsAEQEMFCsAAGQCCQ9kFgJmD2QWAgIBD2QWAmYPZBYCAgEPZBYCAgEPZBYCZg9kFgICAw9kFgICAQ9kFgICAQ9kFgJmD2QWBAIHD2QWAgIDDxBkZBYBZmQCCQ9kFgICAw8QZGQWAWZkGAEFCUdyaWRWaWV3MQ9nZG2B9CXjxCBmF2k0CYKrGHxtaw%2BsKQzpNecn6k12fSD0&__VIEWSTATEGENERATOR=B98B31EF&btnSearch=Search&txtAddress=CF236DN";
 
 	public String scrapeForData(WebClient webClient) throws Exception {
 		logger.info("Navigating to {} ", URL);
@@ -47,11 +47,11 @@ public class ScraperImplBins implements Scraper {
 		}
 
 		synchronized(page) {
-			page.wait(2000);  // How often to check
+			page.wait(10000);  // How often to check
 		}
 
 //		HtmlTable dataTable = page.getFirstByXPath("//div[@id='htmlWaste']//table[@width='100%']");
-		HtmlTableRow nextBinDayRow = page.getFirstByXPath("//div[@id='htmlWaste']//table[@width='100%']//tr[2]");
+		HtmlTableRow nextBinDayRow = page.getFirstByXPath("//div[@id='htmlWaste']//table[@class='border']//tr[2]");
 		String data = nextBinDayRow.asText().replaceAll("\\t+",", ").replaceAll("\\n", " ");
 		logger.info("\nData: \n**************\n" + data + "\n************");
 
