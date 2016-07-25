@@ -52,11 +52,12 @@ public class ScraperImplBins implements Scraper {
 
 		boolean timedOut=false;
 		JavaScriptJobManager manager = page.getEnclosingWindow().getJobManager();
+		int numberOfWaits=0;
 		while (manager.getJobCount() > 0) {
 			Thread.sleep(TIME_TO_WAIT_IN_MILLIS);
-			NUMBER_OF_WAITS++;
-			int timeSpentWaiting = TIME_TO_WAIT_IN_MILLIS * NUMBER_OF_WAITS;
-			System.out.println("Waiting #"+ NUMBER_OF_WAITS +", total time spent waiting " + timeSpentWaiting);
+			numberOfWaits++;
+			int timeSpentWaiting = TIME_TO_WAIT_IN_MILLIS * numberOfWaits;
+			System.out.println("Waiting #"+ numberOfWaits +", total time spent waiting " + timeSpentWaiting);
 
 			if (timeSpentWaiting > MAX_TIME_TO_WAIT){
 				timedOut = true;
