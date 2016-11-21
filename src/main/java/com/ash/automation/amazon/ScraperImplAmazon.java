@@ -48,8 +48,10 @@ public class ScraperImplAmazon implements Scraper {
 			double currentPrice = getCurrentPrice(webClient, productUrl);
 
 			if (Double.compare(currentPrice, Double.parseDouble(product.getExpectedPrice())) < 0){
-				data += String.format("Price of *%s* has dropped to *%s*\n", product.getName(), currentPrice);
+				data += String.format("Price of *%s* has dropped from *%s* to *%s*\n", product.getName(), product.getLastRecordedPrice(), currentPrice);
 				System.out.println(data);
+				product.setLastRecordedPrice(String.valueOf(currentPrice));
+				productRepository.saveAndFlush(product);
 			}
 		}
 

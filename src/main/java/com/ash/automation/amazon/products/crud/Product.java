@@ -11,7 +11,6 @@
 
 package com.ash.automation.amazon.products.crud;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -26,13 +25,9 @@ public class Product {
 	private Long id;
 
 	private String name;
-
 	private String url;
-
-	@Column(name = "expected_Price")
 	private String expectedPrice;
-
-	private String currentPrice = "";
+	private String lastRecordedPrice = "";
 
 	public Product(){
 
@@ -77,11 +72,11 @@ public class Product {
 		this.expectedPrice = expectedPrice;
 	}
 
-	public String getCurrentPrice() {
-		return currentPrice;
+	public String getLastRecordedPrice() {
+		return lastRecordedPrice;
 	}
 
-	public void setCurrentPrice(String currentPrice) {
-		this.currentPrice = currentPrice;
+	public void setLastRecordedPrice(String lastRecordedPrice) {
+		this.lastRecordedPrice = lastRecordedPrice;
 	}
 }
