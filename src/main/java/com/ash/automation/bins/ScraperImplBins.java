@@ -40,7 +40,10 @@ public class ScraperImplBins implements Scraper {
 		logger.info("Navigating to {} ", URL);
 		webClient.getOptions().setJavaScriptEnabled(true);
 
-		final HtmlPage page = webClient.getPage(URL);
+		HtmlPage page = webClient.getPage(URL);
+		page = page.getElementById("btnSearch").click();
+		Thread.sleep(TIME_TO_WAIT_IN_MILLIS);
+
 		DomElement addressDropdownElement = page.getElementById("droAddress");
 
 		if (addressDropdownElement instanceof HtmlSelect){
